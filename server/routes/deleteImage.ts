@@ -33,7 +33,7 @@ route.delete("/delete", async (req, res) => {
 
   // Delete from Cloudflare
 
-  return res.send(url);
+  return res.send({status:200});
 });
 
 export default route;

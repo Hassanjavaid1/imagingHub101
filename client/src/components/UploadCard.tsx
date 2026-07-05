@@ -3,15 +3,18 @@ import { UploadCloud, CloudUpload, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ToastContainer, toast } from "react-toastify";
 
 interface UploadCardProps {
   accept?: string;
   maxSizeMb?: number;
+  onUploadSuccess: (url: string) => void;
 }
 
 export function UploadCard({
   accept = "image/jpeg,image/png,image/webp,image/avif,image/tiff,image/gif",
   maxSizeMb = 5,
+  onUploadSuccess,
 }: UploadCardProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -32,21 +35,25 @@ export function UploadCard({
     try {
       const formData = new FormData();
       formData.append("image", file);
-
+      console.log("form daa", formData);
       const response = await fetch("http://localhost:3000/", {
         method: "POST",
         body: formData,
       });
 
       const data = await response.json();
+      console.log(data);
+      toast.success("Upload success!");
 
-      if (!response.ok) {
-        setError(data.error || "Upload failed");
-        return;
-      }
+      // Image domain change
 
-      setUploadedUrl(data.url);
+      let urlSplit = data.split("/")[3];
+      console.log(urlSplit);
+      let customURL = `http://localhost:3000/transform/${urlSplit}`;
+      onUploadSuccess(customURL);
     } catch (err) {
+      toast.error("Upload failed! Try again.");
+
       setError("Something went wrong. Please try again.");
     } finally {
       setIsUploading(false);
@@ -65,11 +72,12 @@ export function UploadCard({
       setIsDragActive(false);
       handleFiles(event.dataTransfer.files);
     },
-    [handleFiles]
+    [handleFiles],
   );
 
   return (
     <Card className="border-slate-800 bg-slate-900/60">
+      <ToastContainer />
       <CardHeader className="flex-row items-center gap-3 space-y-0">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-500/15">
           <CloudUpload className="h-4.5 w-4.5 text-violet-400" />
@@ -99,13 +107,16 @@ export function UploadCard({
             "flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-6 py-14 text-center transition-colors cursor-pointer",
             "border-violet-500/40 bg-slate-950/40 hover:border-violet-500/70",
             isDragActive && "border-violet-400 bg-violet-500/5",
-            isUploading && "opacity-50 cursor-not-allowed"
+            isUploading && "opacity-50 cursor-not-allowed",
           )}
         >
           {isUploading ? (
             <Loader2 className="h-9 w-9 text-violet-400 animate-spin" />
           ) : (
-            <UploadCloud className="h-9 w-9 text-violet-400" strokeWidth={1.75} />
+            <UploadCloud
+              className="h-9 w-9 text-violet-400"
+              strokeWidth={1.75}
+            />
           )}
 
           <div className="space-y-1">
@@ -142,9 +153,7 @@ export function UploadCard({
         </div>
 
         {/* error */}
-        {error && (
-          <p className="text-xs text-red-400 text-center">{error}</p>
-        )}
+        {error && <p className="text-xs text-red-400 text-center">{error}</p>}
 
         {/* success */}
         {uploadedUrl && !isUploading && (

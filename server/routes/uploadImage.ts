@@ -25,12 +25,7 @@ route.post("/", upload.single("image"), async (req, res) => {
     const ext = image.mimetype.split("/")[1];
     const imageName = `${Date.now()}.${ext}`;
     const url = `https://pub-59656db884864fe3b1e24c5aff7daf97.r2.dev/${imageName}`;
-
-    // Size conversion
-    let bytes: number = image.size;
-    let convert: number = bytes / 1000000;
-    let size: number = Number(Math.round(Number(`${convert}e1`)) + "e-1");
-
+    let size: number = image.size;
     
     // Save to Cloudeflare
 
