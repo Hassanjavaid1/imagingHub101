@@ -46,7 +46,6 @@ export function ImagesTable() {
     setError(null);
 
     try {
-      // Adjust this path to wherever your route is mounted, e.g. app.use("/api/media", route)
       const res = await fetch(`${API_BASE_URL}`, {
         method: "GET",
        // credentials: "include", // drop if you're not using cookies/auth

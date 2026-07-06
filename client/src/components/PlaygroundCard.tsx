@@ -91,7 +91,7 @@ export function PlaygroundCard({ uploadedURL }: PlaygroundCardProps) {
               id="image-url"
               value={imageUrl}
               readOnly
-              placeholder="..."
+              placeholder="URL..."
               className="border-slate-700 bg-slate-950/60 text-sm text-slate-200 placeholder:text-slate-600"
             />
             <Button
