@@ -10,6 +10,8 @@ interface UploadCardProps {
   accept?: string;
   maxSizeMb?: number;
   onUploadSuccess: (url: string) => void;
+    onFileSelected: (file: File) => void;
+
 }
 
 export function UploadCard({

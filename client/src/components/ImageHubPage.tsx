@@ -1,34 +1,16 @@
-
 import { useState } from "react";
 import { ImageHubHeader } from "./ImageHubHeader";
 import { ImageHubHero } from "./ImageHubHero";
 import { UploadCard } from "./UploadCard";
 import { PlaygroundCard } from "./PlaygroundCard";
 import { ImagesTable } from "./ImagesTable";
-import type { UploadedImage } from "./types";
-import { getUserId } from "@/lib/userId";
-
 
 export default function ImageHubPage() {
-  const [images, setImages] = useState<UploadedImage[]>();
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
-
 
   const handleFileSelected = (file: File) => {
     // Wire this up to your actual upload endpoint (e.g. POST /api/upload).
     console.log("Selected file:", file.name);
-  };
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    // Replace with a real fetch of the latest image list.
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setIsRefreshing(false);
-  };
-
-  const handleDelete = (id: string) => {
-    setImages((current) => current.filter((image) => image.id !== id));
   };
 
   return (
@@ -38,16 +20,15 @@ export default function ImageHubPage() {
         <ImageHubHero />
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <UploadCard onFileSelected={handleFileSelected} onUploadSuccess={setUploadedUrl} />
-          <PlaygroundCard uploadedURL={uploadedUrl}/>
+          <UploadCard
+            onFileSelected={handleFileSelected}
+            onUploadSuccess={setUploadedUrl}
+            uploadedUrl={uploadedUrl}
+          />
+          <PlaygroundCard uploadedURL={uploadedUrl} />
         </div>
 
-        <ImagesTable
-          images={images}
-          onRefresh={handleRefresh}
-          onDelete={handleDelete}
-          isRefreshing={isRefreshing}
-        />
+        <ImagesTable />
       </div>
     </div>
   );
