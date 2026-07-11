@@ -1,5 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
-import { Image as ImageIcon, RefreshCcw, Copy, Check, Trash2 } from "lucide-react";
+import {
+  Image as ImageIcon,
+  RefreshCcw,
+  Copy,
+  Check,
+  Trash2,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +17,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatBytes, formatDate, type UploadedImage } from "./types";
+import { getUserId } from "@/lib/userId";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
 
 // Exact shape returned by your backend: SELECT id, url, name, size, uploaded_at FROM media
 interface MediaRow {
@@ -48,7 +56,9 @@ export function ImagesTable() {
     try {
       const res = await fetch(`${API_BASE_URL}`, {
         method: "GET",
-       // credentials: "include", // drop if you're not using cookies/auth
+        headers: {
+          "X-User-Id": getUserId(),
+        },
       });
 
       if (!res) {
@@ -71,11 +81,14 @@ export function ImagesTable() {
 
   const handleCopy = async (id: string, url: string) => {
     try {
-      let baseURL:string = `localhost:3000/transform/${url}`;
+      let baseURL: string = `localhost:3000/transform/${url}`;
 
       await navigator.clipboard.writeText(baseURL);
       setCopiedId(id);
-      setTimeout(() => setCopiedId((current) => (current === id ? null : current)), 1500);
+      setTimeout(
+        () => setCopiedId((current) => (current === id ? null : current)),
+        1500,
+      );
     } catch {
       // Clipboard API unavailable; fail silently in the UI
     }
@@ -87,17 +100,15 @@ export function ImagesTable() {
         method: "DELETE",
       });
 
-      console.log(res)
-      console.log(res.status)
+      console.log(res);
+      console.log(res.status);
 
-      if(res.status == 200){
+      if (res.status == 200) {
         setImages((current) => current.filter((img) => img.id !== id));
       }
-      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-
   };
 
   return (
@@ -124,7 +135,9 @@ export function ImagesTable() {
           disabled={isRefreshing}
           className="gap-1.5 border-violet-700/60 text-violet-300 hover:bg-violet-500/10 hover:text-violet-200"
         >
-          <RefreshCcw className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+          <RefreshCcw
+            className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin" : ""}`}
+          />
           Refresh
         </Button>
       </CardHeader>
@@ -140,74 +153,88 @@ export function ImagesTable() {
           <TableHeader>
             <TableRow className="border-slate-800 hover:bg-transparent">
               <TableHead className="text-xs text-slate-500">Preview</TableHead>
-              <TableHead className="text-xs text-slate-500">Image Name</TableHead>
+              <TableHead className="text-xs text-slate-500">
+                Image Name
+              </TableHead>
               <TableHead className="text-xs text-slate-500">Size</TableHead>
-              <TableHead className="text-xs text-slate-500">Uploaded At</TableHead>
-              <TableHead className="text-right text-xs text-slate-500">Actions</TableHead>
+              <TableHead className="text-xs text-slate-500">
+                Uploaded At
+              </TableHead>
+              <TableHead className="text-right text-xs text-slate-500">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {isLoading ? (
               <TableRow className="border-slate-800 hover:bg-transparent">
-                <TableCell colSpan={6} className="py-10 text-center text-sm text-slate-500">
+                <TableCell
+                  colSpan={6}
+                  className="py-10 text-center text-sm text-slate-500"
+                >
                   Loading your images…
                 </TableCell>
               </TableRow>
             ) : images.length === 0 ? (
               <TableRow className="border-slate-800 hover:bg-transparent">
-                <TableCell colSpan={6} className="py-10 text-center text-sm text-slate-500">
+                <TableCell
+                  colSpan={6}
+                  className="py-10 text-center text-sm text-slate-500"
+                >
                   No images uploaded yet. Upload one above to get started.
                 </TableCell>
               </TableRow>
             ) : (
               [...images].reverse().map((image) => (
                 <>
-                
-                <TableRow key={image.id} className="border-slate-800 hover:bg-slate-800/30">
-                  <TableCell>
-                    <img
-                      src={image.previewUrl}
-                      alt={image.name}
-                      className="h-12 w-12 rounded-md object-cover"
-                    />
-                  </TableCell>
-                  <TableCell className="text-sm font-medium text-slate-200">
-                    {image.name}
-                  </TableCell>
-                  <TableCell className="text-sm text-slate-400">
-                    {formatBytes(image.sizeBytes)}
-                  </TableCell>
-                  <TableCell className="text-sm text-slate-400">
-                    {formatDate(image.uploadedAt)}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleCopy(image.id, image.name)}
-                        className="gap-1.5 border-violet-700/60 text-violet-300 hover:bg-violet-500/10 hover:text-violet-200"
-                      >
-                        {copiedId === image.id ? (
-                          <Check className="h-3.5 w-3.5" />
-                        ) : (
-                          <Copy className="h-3.5 w-3.5" />
-                        )}
-                        Copy URL
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleDelete(image.id)}
-                        className="border-slate-700 text-slate-400 hover:bg-red-500/10 hover:text-red-400"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                  <TableRow
+                    key={image.id}
+                    className="border-slate-800 hover:bg-slate-800/30"
+                  >
+                    <TableCell>
+                      <img
+                        src={image.previewUrl}
+                        alt={image.name}
+                        className="h-12 w-12 rounded-md object-cover"
+                      />
+                    </TableCell>
+                    <TableCell className="text-sm font-medium text-slate-200">
+                      {image.name}
+                    </TableCell>
+                    <TableCell className="text-sm text-slate-400">
+                      {formatBytes(image.sizeBytes)}
+                    </TableCell>
+                    <TableCell className="text-sm text-slate-400">
+                      {formatDate(image.uploadedAt)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleCopy(image.id, image.name)}
+                          className="gap-1.5 border-violet-700/60 text-violet-300 hover:bg-violet-500/10 hover:text-violet-200"
+                        >
+                          {copiedId === image.id ? (
+                            <Check className="h-3.5 w-3.5" />
+                          ) : (
+                            <Copy className="h-3.5 w-3.5" />
+                          )}
+                          Copy URL
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleDelete(image.id)}
+                          className="border-slate-700 text-slate-400 hover:bg-red-500/10 hover:text-red-400"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 </>
               ))

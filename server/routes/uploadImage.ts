@@ -19,6 +19,11 @@ export const r2 = new S3Client({
 
 route.post("/", upload.single("image"), async (req, res) => {
   try {
+    const userId = req.header("X-User-Id");
+    console.log(userId);
+    if (!userId) {
+      return res.status(401).json({ error: "Missing user id" });
+    }
     const image = req.file;
     if (!image) return res.status(400).json({ error: "No Image provided" });
 
@@ -26,7 +31,7 @@ route.post("/", upload.single("image"), async (req, res) => {
     const imageName = `${Date.now()}.${ext}`;
     const url = `https://pub-59656db884864fe3b1e24c5aff7daf97.r2.dev/${imageName}`;
     let size: number = image.size;
-    
+
     // Save to Cloudeflare
 
     await r2.send(
@@ -40,11 +45,10 @@ route.post("/", upload.single("image"), async (req, res) => {
 
     //Save to Database
 
-    await dbPool.execute("INSERT INTO media(url,name,size) VALUES (?,?,?)", [
-      url,
-      imageName,
-      size,
-    ]);
+    await dbPool.execute(
+      "INSERT INTO media(url,name,size,user_id) VALUES (?,?,?,?)",
+      [url, imageName, size, userId],
+    );
 
     return res.json(url);
   } catch (error) {

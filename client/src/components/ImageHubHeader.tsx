@@ -9,7 +9,7 @@ export function ImageHubHeader() {
           <CloudUpload className="h-5 w-5 text-white" strokeWidth={2.25} />
         </div>
         <span className="text-xl font-semibold tracking-tight text-slate-50">
-          ImageHub
+          ImagingHub
         </span>
       </div>
 

@@ -200,8 +200,8 @@ export function PlaygroundCard({ uploadedURL }: PlaygroundCardProps) {
               >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="webp">webp</SelectItem>
+              <SelectContent className="bg-slate-950/60 text-slate-200">
+                <SelectItem value="webp" >webp</SelectItem>
                 <SelectItem value="jpeg">jpeg</SelectItem>
                 <SelectItem value="png">png</SelectItem>
                 <SelectItem value="avif">avif</SelectItem>

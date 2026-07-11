@@ -6,6 +6,7 @@ import { UploadCard } from "./UploadCard";
 import { PlaygroundCard } from "./PlaygroundCard";
 import { ImagesTable } from "./ImagesTable";
 import type { UploadedImage } from "./types";
+import { getUserId } from "@/lib/userId";
 
 
 export default function ImageHubPage() {

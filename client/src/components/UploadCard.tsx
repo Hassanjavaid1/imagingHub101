@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ToastContainer, toast } from "react-toastify";
+import { getUserId } from "@/lib/userId";
 
 interface UploadCardProps {
   accept?: string;
@@ -39,6 +40,9 @@ export function UploadCard({
       const response = await fetch("http://localhost:3000/", {
         method: "POST",
         body: formData,
+        headers: {
+      'X-User-Id': getUserId(),
+    },
       });
 
       const data = await response.json();
