@@ -9,7 +9,7 @@ import cors from 'cors';
 const app = express();
 //app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://imaginghub.vercel.app',
     // credentials:true,
 }));
 const port = 3000;
