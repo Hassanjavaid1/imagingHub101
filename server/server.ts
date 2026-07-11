@@ -15,7 +15,7 @@ app.use(cors({
    // credentials:true,
 }));
 
-const port = 3000
+const PORT = process.env.PORT || 3000;
 
 app.use("/", uploadImage)
 app.use("/",transformImage)
@@ -24,6 +24,6 @@ app.use("/",deleteImage)
 
 //testDBConnection();
 
-app.listen(port, () => {
-  console.log(`server running at: localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`server running at: localhost:${PORT}`)
 }) 
