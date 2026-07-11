@@ -10,19 +10,18 @@ interface UploadCardProps {
   accept?: string;
   maxSizeMb?: number;
   onUploadSuccess: (url: string) => void;
-    onFileSelected: (file: File) => void;
-
+  uploadedUrl: string;
 }
 
 export function UploadCard({
   accept = "image/jpeg,image/png,image/webp,image/avif,image/tiff,image/gif",
   maxSizeMb = 5,
   onUploadSuccess,
+  uploadedUrl,
 }: UploadCardProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const uploadFile = async (file: File) => {
@@ -43,8 +42,8 @@ export function UploadCard({
         method: "POST",
         body: formData,
         headers: {
-      'X-User-Id': getUserId(),
-    },
+          "X-User-Id": getUserId(),
+        },
       });
 
       const data = await response.json();
