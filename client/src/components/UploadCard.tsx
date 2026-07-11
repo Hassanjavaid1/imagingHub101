@@ -38,7 +38,7 @@ export function UploadCard({
       const formData = new FormData();
       formData.append("image", file);
       console.log("form daa", formData);
-      const response = await fetch("http://localhost:3000/", {
+      const response = await fetch("https://imaginghub-api.onrender.com", {
         method: "POST",
         body: formData,
         headers: {
@@ -54,7 +54,7 @@ export function UploadCard({
 
       let urlSplit = data.split("/")[3];
       console.log(urlSplit);
-      let customURL = `http://localhost:3000/transform/${urlSplit}`;
+      let customURL = `https://imaginghub-api.onrender.com/transform/${urlSplit}`;
       onUploadSuccess(customURL);
     } catch (err) {
       toast.error("Upload failed! Try again.");

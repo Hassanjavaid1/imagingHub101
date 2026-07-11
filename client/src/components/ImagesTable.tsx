@@ -19,8 +19,7 @@ import {
 import { formatBytes, formatDate, type UploadedImage } from "./types";
 import { getUserId } from "@/lib/userId";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
+const API_BASE_URL = "https://imaginghub-api.onrender.com";
 
 // Exact shape returned by your backend: SELECT id, url, name, size, uploaded_at FROM media
 interface MediaRow {
@@ -81,7 +80,7 @@ export function ImagesTable() {
 
   const handleCopy = async (id: string, url: string) => {
     try {
-      let baseURL: string = `localhost:3000/transform/${url}`;
+      let baseURL: string = `${API_BASE_URL}/transform/${url}`;
 
       await navigator.clipboard.writeText(baseURL);
       setCopiedId(id);

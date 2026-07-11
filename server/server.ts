@@ -5,13 +5,11 @@ import transformImage from './routes/transformImage.js'
 import imagesHistory from './routes/imagesHistory.js'
 import deleteImage from './routes/deleteImage.js'
 import cors from 'cors'
-//import cookieParser from "cookie-parser";
 
 const app = express()
-//app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://linkify-shortener.vercel.app',
    // credentials:true,
 }));
 
@@ -22,7 +20,7 @@ app.use("/",transformImage)
 app.use("/",imagesHistory)
 app.use("/",deleteImage)
 
-//testDBConnection();
+testDBConnection();
 
 app.listen(PORT, () => {
   console.log(`server running at: localhost:${PORT}`)
