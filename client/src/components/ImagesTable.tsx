@@ -99,8 +99,8 @@ export function ImagesTable() {
         method: "DELETE",
       });
 
-      console.log(res);
-      console.log(res.status);
+      // console.log(res);
+      // console.log(res.status);
 
       if (res.status == 200) {
         setImages((current) => current.filter((img) => img.id !== id));

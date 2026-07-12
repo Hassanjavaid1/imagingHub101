@@ -20,7 +20,7 @@ app.use("/",transformImage)
 app.use("/",imagesHistory)
 app.use("/",deleteImage)
 
-testDBConnection();
+//testDBConnection();
 
 app.listen(PORT, () => {
   console.log(`server running at: localhost:${PORT}`)
