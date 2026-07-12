@@ -10,14 +10,12 @@ interface UploadCardProps {
   accept?: string;
   maxSizeMb?: number;
   onUploadSuccess: (url: string) => void;
-  uploadedUrl: string;
 }
 
 export function UploadCard({
   accept = "image/jpeg,image/png,image/webp,image/avif,image/tiff,image/gif",
   maxSizeMb = 5,
   onUploadSuccess,
-  uploadedUrl,
 }: UploadCardProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -47,14 +45,14 @@ export function UploadCard({
       });
 
       const data = await response.json();
-      console.log(data);
+    //  console.log(data);
       toast.success("Upload success!");
 
       // Image domain change
 
       let urlSplit = data.split("/")[3];
-      console.log(urlSplit);
-      let customURL = `https://imaginghub-api.onrender.com/transform/${urlSplit}`;
+      //console.log(urlSplit);
+      let customURL = `https://imaginghub.vercel.app/transform/${urlSplit}`;
       onUploadSuccess(customURL);
     } catch (err) {
       toast.error("Upload failed! Try again.");
@@ -159,14 +157,6 @@ export function UploadCard({
 
         {/* error */}
         {error && <p className="text-xs text-red-400 text-center">{error}</p>}
-
-        {/* success */}
-        {uploadedUrl && !isUploading && (
-          <div className="rounded-lg border border-violet-500/20 bg-slate-950/40 p-3 space-y-2">
-            <p className="text-xs text-slate-400">Uploaded URL:</p>
-            <p className="text-xs text-violet-400 break-all">{uploadedUrl}</p>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

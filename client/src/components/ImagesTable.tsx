@@ -80,7 +80,7 @@ export function ImagesTable() {
 
   const handleCopy = async (id: string, url: string) => {
     try {
-      let baseURL: string = `${API_BASE_URL}/transform/${url}`;
+      let baseURL: string = `https://imaginghub.vercel.app/transform/${url}`;
 
       await navigator.clipboard.writeText(baseURL);
       setCopiedId(id);
@@ -95,7 +95,7 @@ export function ImagesTable() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/delete/?id=${id}`, {
+      const res = await fetch(`https://imaginghub.vercel.app/delete/?id=${id}`, {
         method: "DELETE",
       });
 
@@ -144,7 +144,7 @@ export function ImagesTable() {
       <CardContent className="p-2">
         {error && (
           <p className="px-2 pb-2 text-sm text-red-400">
-            Couldn't load images: {error}
+            Couldn't load images!
           </p>
         )}
 
