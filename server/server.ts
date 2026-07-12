@@ -23,5 +23,5 @@ app.use("/",deleteImage)
 //testDBConnection();
 
 app.listen(PORT, () => {
-  console.log(`server running at: localhost:${PORT}`)
+  console.log(`server running at: ${PORT}`)
 }) 

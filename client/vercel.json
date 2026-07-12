@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/transform/:filename*",
+      "destination": "https://imaginghub-api.onrender.com/transform/:filename*"
+    }
+  ]
+}
